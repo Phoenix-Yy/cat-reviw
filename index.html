@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐱 猫咪用品测评记录</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f7f3ed; font-family: system-ui, sans-serif; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { text-align: center; font-size: 2em; margin-bottom: 30px; color: #5d4037; }
+        .card {
+            background: white; border-radius: 16px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-left: 6px solid #ffb300;
+        }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .status { display: flex; gap: 12px; font-size: 0.9em; }
+        .status span { background: #eee; padding: 4px 12px; border-radius: 20px; }
+        .status .opened { background: #c8e6c9; color: #2e7d32; }
+        .status .unopened { background: #ffe0b2; color: #e65100; }
+        .status .delivery { background: #e3f2fd; color: #1565c0; }
+        .product-name { font-size: 1.5em; font-weight: bold; color: #3e2723; }
+        .dates { font-size: 0.9em; color: #666; margin-bottom: 16px; display: flex; gap: 24px; flex-wrap: wrap; }
+        .daily-log { border-top: 1px dashed #ccc; padding-top: 16px; margin-top: 12px; }
+        .day-entry { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+        .day-entry .day-date { font-weight: bold; min-width: 70px; color: #5d4037; }
+        .day-entry .day-content { flex: 1; }
+        .day-entry .day-content p { margin-bottom: 8px; }
+        .day-entry img { max-width: 200px; border-radius: 12px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; }
+        .summary-box { background: #fff8e1; border-radius: 12px; padding: 16px; margin: 16px 0; }
+        .summary-box h4 { margin-bottom: 8px; color: #bf360c; }
+        .recommend { display: flex; align-items: center; gap: 12px; font-size: 1.1em; }
+        .stars { color: #ffb300; font-size: 1.3em; }
+        .btn-add { display: block; margin: 30px auto; padding: 14px 32px; background: #5d4037; color: white; border: none; border-radius: 30px; font-size: 1.1em; cursor: pointer; }
+        .btn-add:hover { background: #3e2723; }
+        @media (max-width: 500px) {
+            body { padding: 12px; }
+            .card { padding: 16px; }
+            .day-entry { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐾 猫咪用品测评记录</h1>
+
+        <!-- 👇 卡片模板：复制从这里开始（每个产品复制一整段 .card） -->
+        <div class="card">
+            <div class="card-header">
+                <div class="product-name">🐈 产品名称：XX牌豆腐猫砂</div>
+                <div class="status">
+                    <span class="delivery">📦 已签收</span>
+                    <span class="unopened">🔲 未开封</span>
+                </div>
+            </div>
+            <div class="dates">
+                <span>📅 快递到达：6月29日</span>
+                <span>📅 开封日期：6月30日</span>
+            </div>
+
+            <div class="daily-log">
+                <div class="day-entry">
+                    <div class="day-date">📝 6月30日</div>
+                    <div class="day-content">
+                        <p>第一次使用感受：结团很快，几乎无粉尘，猫猫马上就去用了。</p>
+                        <img src="photo_6-30.jpg" alt="6月30日使用照片" onclick="this.requestFullscreen().catch(()=>{})">
+                    </div>
+                </div>
+                <div class="day-entry">
+                    <div class="day-date">📝 7月1日</div>
+                    <div class="day-content">
+                        <p>第二天：除臭效果一般，盆底稍微有点粘。</p>
+                        <img src="photo_7-1.jpg" alt="7月1日照片" onclick="this.requestFullscreen().catch(()=>{})">
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <h4>📋 使用结果与总结</h4>
+                <p>性价比不错，结团速度优秀，但除臭力只能撑一天，适合勤铲屎的家庭。</p>
+            </div>
+            <div class="recommend">
+                <span>⭐ 推荐程度：</span>
+                <span class="stars">⭐⭐⭐</span>
+                <span>（可以考虑回购）</span>
+            </div>
+        </div>
+        <!-- 👆 卡片模板结束 -->
+
+        <!-- 第二个产品示例（将来你可复制添加更多） -->
+        <div class="card">
+            <div class="card-header">
+                <div class="product-name">🐈 产品名称：XX猫抓板</div>
+                <div class="status">
+                    <span class="delivery">📦 已签收</span>
+                    <span class="opened">✅ 已开封</span>
+                </div>
+            </div>
+            <div class="dates">
+                <span>📅 快递到达：6月28日</span>
+                <span>📅 开封日期：6月28日</span>
+            </div>
+
+            <div class="daily-log">
+                <div class="day-entry">
+                    <div class="day-date">📝 6月28日</div>
+                    <div class="day-content">
+                        <p>猫猫有点好奇，抓了几下就走开了。</p>
+                        <img src="scratch_day1.jpg" alt="第一天" onclick="this.requestFullscreen().catch(()=>{})">
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <h4>📋 使用结果与总结</h4>
+                <p>抓板材质偏硬，猫咪不太爱，可能需要撒点猫薄荷。</p>
+            </div>
+            <div class="recommend">
+                <span>⭐ 推荐程度：</span>
+                <span class="stars">⭐⭐</span>
+                <span>（不太推荐）</span>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
