@@ -8,10 +8,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #f7f3ed; font-family: system-ui, sans-serif; padding: 20px; color: #333; }
         .container { max-width: 800px; margin: 0 auto; }
-        h1 { text-align: center; font-size: 2em; margin-bottom: 30px; color: #5d4037; }
+        h1 { text-align: center; font-size: 2em; margin-bottom: 20px; color: #5d4037; }
+        .btn-add {
+            display: block; margin: 0 auto 30px auto; padding: 14px 32px;
+            background: #5d4037; color: white; border: none; border-radius: 30px;
+            font-size: 1.1em; cursor: pointer;
+        }
+        .btn-add:hover { background: #3e2723; }
         .card {
             background: white; border-radius: 16px; padding: 24px; margin-bottom: 24px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-left: 6px solid #ffb300;
+            position: relative;
         }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
         .status { display: flex; gap: 12px; font-size: 0.9em; }
@@ -31,8 +38,25 @@
         .summary-box h4 { margin-bottom: 8px; color: #bf360c; }
         .recommend { display: flex; align-items: center; gap: 12px; font-size: 1.1em; }
         .stars { color: #ffb300; font-size: 1.3em; }
-        .btn-add { display: block; margin: 30px auto; padding: 14px 32px; background: #5d4037; color: white; border: none; border-radius: 30px; font-size: 1.1em; cursor: pointer; }
-        .btn-add:hover { background: #3e2723; }
+        .card-buttons { position: absolute; top: 16px; right: 16px; display: flex; gap: 8px; }
+        .card-buttons button { background: #eee; border: none; padding: 4px 12px; border-radius: 12px; cursor: pointer; font-size: 0.9em; }
+        .card-buttons button:hover { background: #ddd; }
+        /* 弹窗表单 */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 100; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 16px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-content h3 { margin-bottom: 16px; color: #5d4037; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 4px; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 8px; font-size: 1em; }
+        .form-group textarea { resize: vertical; }
+        .day-images { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .day-images img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+        .add-day-btn { background: #e0e0e0; border: none; padding: 6px 12px; border-radius: 12px; cursor: pointer; margin-top: 8px; }
+        .modal-buttons { display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; }
+        .modal-buttons button { padding: 10px 20px; border: none; border-radius: 20px; cursor: pointer; font-size: 1em; }
+        .btn-save { background: #5d4037; color: white; }
+        .btn-cancel { background: #eee; }
         @media (max-width: 500px) {
             body { padding: 12px; }
             .card { padding: 16px; }
@@ -43,85 +67,301 @@
 <body>
     <div class="container">
         <h1>🐾 猫咪用品测评记录</h1>
-
-        <!-- 👇 卡片模板：复制从这里开始（每个产品复制一整段 .card） -->
-        <div class="card">
-            <div class="card-header">
-                <div class="product-name">🐈 产品名称：XX牌豆腐猫砂</div>
-                <div class="status">
-                    <span class="delivery">📦 已签收</span>
-                    <span class="unopened">🔲 未开封</span>
-                </div>
-            </div>
-            <div class="dates">
-                <span>📅 快递到达：6月29日</span>
-                <span>📅 开封日期：6月30日</span>
-            </div>
-
-            <div class="daily-log">
-                <div class="day-entry">
-                    <div class="day-date">📝 6月30日</div>
-                    <div class="day-content">
-                        <p>第一次使用感受：结团很快，几乎无粉尘，猫猫马上就去用了。</p>
-                        <img src="photo_6-30.jpg" alt="6月30日使用照片" onclick="this.requestFullscreen().catch(()=>{})">
-                    </div>
-                </div>
-                <div class="day-entry">
-                    <div class="day-date">📝 7月1日</div>
-                    <div class="day-content">
-                        <p>第二天：除臭效果一般，盆底稍微有点粘。</p>
-                        <img src="photo_7-1.jpg" alt="7月1日照片" onclick="this.requestFullscreen().catch(()=>{})">
-                    </div>
-                </div>
-            </div>
-
-            <div class="summary-box">
-                <h4>📋 使用结果与总结</h4>
-                <p>性价比不错，结团速度优秀，但除臭力只能撑一天，适合勤铲屎的家庭。</p>
-            </div>
-            <div class="recommend">
-                <span>⭐ 推荐程度：</span>
-                <span class="stars">⭐⭐⭐</span>
-                <span>（可以考虑回购）</span>
-            </div>
-        </div>
-        <!-- 👆 卡片模板结束 -->
-
-        <!-- 第二个产品示例（将来你可复制添加更多） -->
-        <div class="card">
-            <div class="card-header">
-                <div class="product-name">🐈 产品名称：XX猫抓板</div>
-                <div class="status">
-                    <span class="delivery">📦 已签收</span>
-                    <span class="opened">✅ 已开封</span>
-                </div>
-            </div>
-            <div class="dates">
-                <span>📅 快递到达：6月28日</span>
-                <span>📅 开封日期：6月28日</span>
-            </div>
-
-            <div class="daily-log">
-                <div class="day-entry">
-                    <div class="day-date">📝 6月28日</div>
-                    <div class="day-content">
-                        <p>猫猫有点好奇，抓了几下就走开了。</p>
-                        <img src="scratch_day1.jpg" alt="第一天" onclick="this.requestFullscreen().catch(()=>{})">
-                    </div>
-                </div>
-            </div>
-
-            <div class="summary-box">
-                <h4>📋 使用结果与总结</h4>
-                <p>抓板材质偏硬，猫咪不太爱，可能需要撒点猫薄荷。</p>
-            </div>
-            <div class="recommend">
-                <span>⭐ 推荐程度：</span>
-                <span class="stars">⭐⭐</span>
-                <span>（不太推荐）</span>
-            </div>
-        </div>
-
+        <button class="btn-add" onclick="openAddModal()">➕ 添加新产品</button>
+        <div id="card-container"></div>
     </div>
+
+    <!-- 添加/编辑产品的弹窗 -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <h3 id="modal-title">添加新产品</h3>
+            <input type="hidden" id="edit-id">
+            <div class="form-group">
+                <label>产品名称</label>
+                <input type="text" id="prod-name" placeholder="例如：XX牌豆腐猫砂">
+            </div>
+            <div class="form-group">
+                <label>快递状态</label>
+                <select id="prod-delivery">
+                    <option value="等待中">📦 等待中</option>
+                    <option value="已签收">📦 已签收</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>是否开封</label>
+                <select id="prod-opened">
+                    <option value="未开封">🔲 未开封</option>
+                    <option value="已开封">✅ 已开封</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>快递到达日期</label>
+                <input type="date" id="prod-arrive">
+            </div>
+            <div class="form-group">
+                <label>开封日期</label>
+                <input type="date" id="prod-open-date">
+            </div>
+            <fieldset style="border:1px solid #ddd; border-radius:8px; padding:12px; margin-bottom:12px;">
+                <legend>每日使用记录</legend>
+                <div id="daily-entries"></div>
+                <button type="button" class="add-day-btn" onclick="addDayEntry()">➕ 添加一天记录</button>
+            </fieldset>
+            <div class="form-group">
+                <label>使用结果与总结</label>
+                <textarea id="prod-summary" rows="3" placeholder="总结使用效果..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>推荐指数（几颗星）</label>
+                <select id="prod-stars">
+                    <option value="1">⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="3" selected>⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeModal()">取消</button>
+                <button class="btn-save" onclick="saveProduct()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 数据存储键名
+        const STORAGE_KEY = 'cat_review_products';
+        let products = [];
+
+        // 从 localStorage 加载数据
+        function loadProducts() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (data) {
+                products = JSON.parse(data);
+            } else {
+                // 首次使用放一个示例产品
+                products = [
+                    {
+                        id: Date.now(),
+                        name: 'XX牌豆腐猫砂',
+                        delivery: '已签收',
+                        opened: '未开封',
+                        arriveDate: '2026-06-29',
+                        openDate: '2026-06-30',
+                        days: [
+                            { date: '2026-06-30', text: '第一次使用感受：结团很快，几乎无粉尘，猫猫马上就去用了。', images: [] },
+                            { date: '2026-07-01', text: '第二天：除臭效果一般，盆底稍微有点粘。', images: [] }
+                        ],
+                        summary: '性价比不错，结团速度优秀，但除臭力只能撑一天，适合勤铲屎的家庭。',
+                        stars: 3
+                    }
+                ];
+                saveProducts();
+            }
+            renderCards();
+        }
+
+        // 保存数据
+        function saveProducts() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+        }
+
+        // 渲染所有卡片
+        function renderCards() {
+            const container = document.getElementById('card-container');
+            container.innerHTML = '';
+            products.forEach((prod, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-buttons">
+                        <button onclick="editProduct(${index})">✏️ 编辑</button>
+                        <button onclick="deleteProduct(${index})">🗑️ 删除</button>
+                    </div>
+                    <div class="card-header">
+                        <div class="product-name">🐈 ${prod.name}</div>
+                        <div class="status">
+                            <span class="delivery">📦 ${prod.delivery}</span>
+                            <span class="${prod.opened === '已开封' ? 'opened' : 'unopened'}">${prod.opened === '已开封' ? '✅ 已开封' : '🔲 未开封'}</span>
+                        </div>
+                    </div>
+                    <div class="dates">
+                        <span>📅 快递到达：${prod.arriveDate || '未填写'}</span>
+                        <span>📅 开封日期：${prod.openDate || '未填写'}</span>
+                    </div>
+                    <div class="daily-log">
+                        ${prod.days.map(day => `
+                            <div class="day-entry">
+                                <div class="day-date">📝 ${day.date || ''}</div>
+                                <div class="day-content">
+                                    <p>${day.text}</p>
+                                    ${day.images && day.images.length > 0 ? day.images.map(img => `<img src="${img}" alt="照片" onclick="this.requestFullscreen().catch(()=>{})">`).join('') : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="summary-box">
+                        <h4>📋 使用结果与总结</h4>
+                        <p>${prod.summary || '暂无总结'}</p>
+                    </div>
+                    <div class="recommend">
+                        <span>⭐ 推荐程度：</span>
+                        <span class="stars">${'⭐'.repeat(prod.stars)}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 打开添加弹窗
+        function openAddModal() {
+            document.getElementById('modal-title').textContent = '添加新产品';
+            document.getElementById('edit-id').value = '';
+            document.getElementById('prod-name').value = '';
+            document.getElementById('prod-delivery').value = '等待中';
+            document.getElementById('prod-opened').value = '未开封';
+            document.getElementById('prod-arrive').value = '';
+            document.getElementById('prod-open-date').value = '';
+            document.getElementById('prod-summary').value = '';
+            document.getElementById('prod-stars').value = '3';
+            document.getElementById('daily-entries').innerHTML = '';
+            addDayEntry(); // 默认添加一条空记录
+            document.getElementById('product-modal').classList.add('active');
+        }
+
+        // 打开编辑弹窗
+        function editProduct(index) {
+            const prod = products[index];
+            document.getElementById('modal-title').textContent = '编辑产品';
+            document.getElementById('edit-id').value = index;
+            document.getElementById('prod-name').value = prod.name;
+            document.getElementById('prod-delivery').value = prod.delivery;
+            document.getElementById('prod-opened').value = prod.opened;
+            document.getElementById('prod-arrive').value = prod.arriveDate;
+            document.getElementById('prod-open-date').value = prod.openDate;
+            document.getElementById('prod-summary').value = prod.summary;
+            document.getElementById('prod-stars').value = prod.stars;
+            // 构建每日记录区域
+            const dailyDiv = document.getElementById('daily-entries');
+            dailyDiv.innerHTML = '';
+            prod.days.forEach((day, dayIndex) => {
+                addDayEntry(day.date, day.text, day.images);
+            });
+            if (prod.days.length === 0) {
+                addDayEntry();
+            }
+            document.getElementById('product-modal').classList.add('active');
+        }
+
+        // 删除产品
+        function deleteProduct(index) {
+            if (confirm('确定要删除这个产品记录吗？')) {
+                products.splice(index, 1);
+                saveProducts();
+                renderCards();
+            }
+        }
+
+        // 添加一天记录（在弹窗中）
+        function addDayEntry(date = '', text = '', images = []) {
+            const container = document.getElementById('daily-entries');
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'day-entry-form';
+            dayDiv.style.cssText = 'border:1px solid #eee; border-radius:8px; padding:8px; margin-bottom:8px;';
+            dayDiv.innerHTML = `
+                <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px;">
+                    <input type="date" class="day-date-input" value="${date}" style="flex:1;">
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:none; border:none; font-size:1.2em; cursor:pointer;">✕</button>
+                </div>
+                <textarea class="day-text-input" rows="2" placeholder="今日使用感受..." style="width:100%; margin-bottom:4px;">${text}</textarea>
+                <div class="day-images-preview" style="display:flex; gap:4px; flex-wrap:wrap;">
+                    ${images.map(img => `<img src="${img}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;">`).join('')}
+                </div>
+                <input type="file" class="day-image-input" accept="image/*" multiple style="font-size:0.9em;">
+            `;
+            // 处理图片预览
+            const fileInput = dayDiv.querySelector('.day-image-input');
+            const previewDiv = dayDiv.querySelector('.day-images-preview');
+            fileInput.addEventListener('change', function(e) {
+                // 只做预览，实际 base64 在保存时转换
+                const files = Array.from(e.target.files);
+                previewDiv.innerHTML = '';
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        const img = document.createElement('img');
+                        img.src = ev.target.result;
+                        img.style.cssText = 'width:50px;height:50px;object-fit:cover;border-radius:4px;';
+                        previewDiv.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+            container.appendChild(dayDiv);
+        }
+
+        // 保存产品（添加或更新）
+        function saveProduct() {
+            const name = document.getElementById('prod-name').value.trim();
+            if (!name) {
+                alert('请输入产品名称');
+                return;
+            }
+            const delivery = document.getElementById('prod-delivery').value;
+            const opened = document.getElementById('prod-opened').value;
+            const arriveDate = document.getElementById('prod-arrive').value;
+            const openDate = document.getElementById('prod-open-date').value;
+            const summary = document.getElementById('prod-summary').value.trim();
+            const stars = parseInt(document.getElementById('prod-stars').value);
+
+            // 收集每日记录
+            const dayDivs = document.querySelectorAll('#daily-entries .day-entry-form');
+            const days = [];
+            dayDivs.forEach(div => {
+                const dateInput = div.querySelector('.day-date-input');
+                const textInput = div.querySelector('.day-text-input');
+                const fileInput = div.querySelector('.day-image-input');
+                const previewImages = div.querySelectorAll('.day-images-preview img');
+                const date = dateInput ? dateInput.value : '';
+                const text = textInput ? textInput.value.trim() : '';
+                // 从预览图中获取 base64
+                const images = [];
+                previewImages.forEach(img => {
+                    if (img.src.startsWith('data:image')) {
+                        images.push(img.src);
+                    }
+                });
+                if (date || text || images.length > 0) {
+                    days.push({ date, text, images });
+                }
+            });
+
+            const productData = {
+                id: Date.now(), // 新增用当前时间戳
+                name, delivery, opened, arriveDate, openDate, days, summary, stars
+            };
+
+            const editId = document.getElementById('edit-id').value;
+            if (editId === '') {
+                // 新增
+                products.push(productData);
+            } else {
+                // 更新，保留原 id
+                productData.id = products[parseInt(editId)].id;
+                products[parseInt(editId)] = productData;
+            }
+
+            saveProducts();
+            renderCards();
+            closeModal();
+        }
+
+        function closeModal() {
+            document.getElementById('product-modal').classList.remove('active');
+        }
+
+        // 页面加载
+        loadProducts();
+    </script>
 </body>
 </html>
